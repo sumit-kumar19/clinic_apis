@@ -16,28 +16,19 @@ from clinic_api.utils import success_response, error_response
 
 
 class PatientViewSet(viewsets.ModelViewSet):
-    # handles create, read, update, delete for patients
 
     serializer_class = PatientSerializer
     permission_classes = [IsStaffOrReadOnly]
 
     def get_queryset(self):
-        # filter by search query param
-        queryset = Patient.objects.all()
-        search = self.request.query_params.get('search', None)
-        if search:
-            queryset = queryset.filter(name__icontains=search)
-
-        return queryset
+        return Patient.objects.all()
 
     def list(self, request, *args, **kwargs):
-        # returns list of all patients
         queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
         return success_response(data=serializer.data, message="Patients fetched successfully.")
 
     def retrieve(self, request, *args, **kwargs):
-        # returns one patient by id
         try:
             instance = self.get_object()
         except Exception:
@@ -47,7 +38,6 @@ class PatientViewSet(viewsets.ModelViewSet):
         return success_response(data=serializer.data, message="Patient fetched successfully.")
 
     def create(self, request, *args, **kwargs):
-        # adds new patient to database
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -59,7 +49,6 @@ class PatientViewSet(viewsets.ModelViewSet):
         return error_response(message="Validation failed.", data=serializer.errors, http_status=400)
 
     def update(self, request, *args, **kwargs):
-        # changes patient info
         partial = kwargs.pop('partial', False)
         try:
             instance = self.get_object()
@@ -73,7 +62,6 @@ class PatientViewSet(viewsets.ModelViewSet):
         return error_response(message="Validation failed.", data=serializer.errors, http_status=400)
 
     def destroy(self, request, *args, **kwargs):
-        # removes patient from database
         try:
             instance = self.get_object()
         except Exception:
@@ -84,13 +72,11 @@ class PatientViewSet(viewsets.ModelViewSet):
 
 
 class AppointmentViewSet(viewsets.ModelViewSet):
-    # handles create, read, update, delete for appointements
 
     serializer_class = AppointmentSerializer
     permission_classes = [IsStaffOrReadOnly]
 
     def get_queryset(self):
-        # filter by status and patient id from query params
         queryset = Appointment.objects.all()
         status_filter = self.request.query_params.get('status', None)
         if status_filter:
@@ -102,13 +88,11 @@ class AppointmentViewSet(viewsets.ModelViewSet):
         return queryset
 
     def list(self, request, *args, **kwargs):
-        # returns all appointements
         queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
         return success_response(data=serializer.data, message="Appointments fetched successfully.")
 
     def retrieve(self, request, *args, **kwargs):
-        # returns one appointement by id
         try:
             instance = self.get_object()
         except Exception:
@@ -118,7 +102,6 @@ class AppointmentViewSet(viewsets.ModelViewSet):
         return success_response(data=serializer.data, message="Appointment fetched successfully.")
 
     def create(self, request, *args, **kwargs):
-        # adds new appointement
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -130,7 +113,6 @@ class AppointmentViewSet(viewsets.ModelViewSet):
         return error_response(message="Validation failed.", data=serializer.errors, http_status=400)
 
     def update(self, request, *args, **kwargs):
-        # changes appointement details
         partial = kwargs.pop('partial', False)
         try:
             instance = self.get_object()
@@ -144,7 +126,6 @@ class AppointmentViewSet(viewsets.ModelViewSet):
         return error_response(message="Validation failed.", data=serializer.errors, http_status=400)
 
     def destroy(self, request, *args, **kwargs):
-        # removes appointement
         try:
             instance = self.get_object()
         except Exception:
@@ -153,24 +134,8 @@ class AppointmentViewSet(viewsets.ModelViewSet):
         instance.delete()
         return success_response(message="Appointment deleted successfully.")
 
-    @action(detail=False, methods=['get'], url_path='upcoming')
-    def upcoming(self, request):
-        # returns appointements for next 7 days
-        now = timezone.now()
-        next_7_days = now + timedelta(days=7)
-        upcoming_appointments = Appointment.objects.filter(
-            appointment_date__gte=now,
-            appointment_date__lte=next_7_days
-        ).order_by('appointment_date')
-        serializer = self.get_serializer(upcoming_appointments, many=True)
-        return success_response(
-            data=serializer.data,
-            message=f"Found {upcoming_appointments.count()} upcoming appointments."
-        )
-
 
 class StatsView(APIView):
-    # returns statistics about patients and appointements
     permission_classes = [IsStaffOrReadOnly]
 
     def get(self, request):
@@ -195,7 +160,6 @@ class StatsView(APIView):
 
 
 class LoginView(APIView):
-    # authenticates user and returns token
     permission_classes = [AllowAny]
 
     def post(self, request):
