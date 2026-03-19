@@ -28,7 +28,7 @@ python manage.py runserver
 > If you get "manage.py not found", you are probably in `clinic_api/clinic_api/`.
 > Go back to `clinic_api/` and run commands there.
 
----
+
 
 ## How to check it is working
 
@@ -70,7 +70,6 @@ If you get `401 Unauthorized`, check that the token header is correct.
 - `GET /api/patients/<id>/` — patient details
 - `POST /api/patients/` — create patient 
 - `GET /api/appointments/` — list appointments
-- `GET /api/appointments/upcoming/` — next 7 days
 - `GET /api/stats/` — statistics
 
 ---

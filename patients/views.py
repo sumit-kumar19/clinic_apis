@@ -26,7 +26,7 @@ class PatientViewSet(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
-        return success_response(data=serializer.data, message="Patients fetched successfully.")
+        return success_response(data=serializer.data, message="Patients fetched .")
 
     def retrieve(self, request, *args, **kwargs):
         try:
@@ -35,7 +35,7 @@ class PatientViewSet(viewsets.ModelViewSet):
             return error_response(message="Patient not found.", http_status=404)
 
         serializer = self.get_serializer(instance)
-        return success_response(data=serializer.data, message="Patient fetched successfully.")
+        return success_response(data=serializer.data, message="Patient fetched .")
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -43,7 +43,7 @@ class PatientViewSet(viewsets.ModelViewSet):
             serializer.save()
             return success_response(
                 data=serializer.data,
-                message="Patient created successfully.",
+                message="Patient created .",
                 http_status=201
             )
         return error_response(message="Validation failed.", data=serializer.errors, http_status=400)
@@ -58,7 +58,7 @@ class PatientViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         if serializer.is_valid():
             serializer.save()
-            return success_response(data=serializer.data, message="Patient updated successfully.")
+            return success_response(data=serializer.data, message="Patient updated .")
         return error_response(message="Validation failed.", data=serializer.errors, http_status=400)
 
     def destroy(self, request, *args, **kwargs):
@@ -68,7 +68,7 @@ class PatientViewSet(viewsets.ModelViewSet):
             return error_response(message="Patient not found.", http_status=404)
 
         instance.delete()
-        return success_response(message="Patient deleted successfully.")
+        return success_response(message="Patient deleted .")
 
 
 class AppointmentViewSet(viewsets.ModelViewSet):
@@ -90,7 +90,7 @@ class AppointmentViewSet(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
-        return success_response(data=serializer.data, message="Appointments fetched successfully.")
+        return success_response(data=serializer.data, message="Appointments fetched .")
 
     def retrieve(self, request, *args, **kwargs):
         try:
@@ -99,7 +99,7 @@ class AppointmentViewSet(viewsets.ModelViewSet):
             return error_response(message="Appointment not found.", http_status=404)
 
         serializer = self.get_serializer(instance)
-        return success_response(data=serializer.data, message="Appointment fetched successfully.")
+        return success_response(data=serializer.data, message="Appointment fetched .")
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -107,7 +107,7 @@ class AppointmentViewSet(viewsets.ModelViewSet):
             serializer.save()
             return success_response(
                 data=serializer.data,
-                message="Appointment created successfully.",
+                message="Appointment created .",
                 http_status=201
             )
         return error_response(message="Validation failed.", data=serializer.errors, http_status=400)
@@ -122,7 +122,7 @@ class AppointmentViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         if serializer.is_valid():
             serializer.save()
-            return success_response(data=serializer.data, message="Appointment updated successfully.")
+            return success_response(data=serializer.data, message="Appointment updated .")
         return error_response(message="Validation failed.", data=serializer.errors, http_status=400)
 
     def destroy(self, request, *args, **kwargs):
@@ -132,7 +132,7 @@ class AppointmentViewSet(viewsets.ModelViewSet):
             return error_response(message="Appointment not found.", http_status=404)
 
         instance.delete()
-        return success_response(message="Appointment deleted successfully.")
+        return success_response(message="Appointment deleted .")
 
 
 class StatsView(APIView):
@@ -156,7 +156,7 @@ class StatsView(APIView):
                 "Cancelled": status_counts.get("Cancelled", 0),
             }
         }
-        return success_response(data=data, message="Stats fetched successfully.")
+        return success_response(data=data, message="Stats fetched .")
 
 
 class LoginView(APIView):
